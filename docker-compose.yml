@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:5.7
+    env_file:
+      - .env
+  web:
+    restart: always
+    env_file:
+      - .env
+    image: web
+    build: ./
+    command: >
+      bash -c "./manage.py migrate &&
+               ./manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
